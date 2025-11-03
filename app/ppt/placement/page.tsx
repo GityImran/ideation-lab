@@ -174,89 +174,89 @@ export default function PlacementPage() {
   }, [suggestions])
 
   return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-white to-gray-50">
-      {/* Sticky header */}
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-        <div className="mx-auto max-w-6xl px-6 py-3 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl md:text-2xl font-semibold tracking-tight text-gray-900">Suggested Insertions</h1>
-            <div className="text-xs md:text-sm text-gray-600 mt-0.5">
-              {fileName || "Untitled presentation"}
-              {model && <span className="ml-2 text-gray-400">• Model: {model}</span>}
-              {hasUnsaved && <span className="ml-2 text-amber-700 bg-amber-100 border border-amber-200 rounded px-1.5 py-0.5">Unsaved</span>}
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={saveChanges}
-              disabled={!hasUnsaved}
-              className="rounded-md bg-indigo-600 px-3 py-1.5 text-xs md:text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50"
-            >
-              Save
-            </button>
-            <button
-              onClick={resetChanges}
-              disabled={!hasUnsaved}
-              className="rounded-md bg-white px-3 py-1.5 text-xs md:text-sm font-medium text-gray-800 border hover:bg-gray-50 disabled:opacity-50"
-            >
-              Reset
-            </button>
-            <Link href="/ppt/study" className="rounded-md bg-white px-3 py-1.5 text-xs md:text-sm font-medium text-gray-800 border hover:bg-gray-50">
-              Back
-            </Link>
-            <Link href="/ppt" className="rounded-md bg-gray-900 px-3 py-1.5 text-xs md:text-sm font-medium text-white hover:bg-black">
-              New File
-            </Link>
-          </div>
-        </div>
-      </div>
+  <main className="min-h-screen w-full py-12 px-6 bg-yellow-100 text-gray-900">
+  {/* Sticky header */}
+  <div className="sticky top-0 z-10 border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+  <div className="mx-auto max-w-6xl px-6 py-3 flex items-center justify-between">
+  <div>
+  <h1 className="text-xl md:text-2xl font-extrabold uppercase tracking-tight text-gray-900">Suggested Insertions</h1>
+  <div className="text-xs md:text-sm text-gray-600 mt-0.5">
+  {fileName || "Untitled presentation"}
+  {model && <span className="ml-2 text-gray-400">• Model: {model}</span>}
+  {hasUnsaved && <span className="ml-2 text-amber-700 bg-amber-100 border-4 border-black rounded-none px-1.5 py-0.5">Unsaved</span>}
+  </div>
+  </div>
+  <div className="flex items-center gap-2">
+  <button
+  onClick={saveChanges}
+  disabled={!hasUnsaved}
+  className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100 disabled:opacity-50"
+  >
+  Save
+  </button>
+  <button
+  onClick={resetChanges}
+  disabled={!hasUnsaved}
+  className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100 disabled:opacity-50"
+  >
+  Reset
+  </button>
+  <Link href="/ppt/study" className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100">
+  Back
+  </Link>
+  <Link href="/ppt" className="border-4 border-black bg-black px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-white shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-800">
+  New File
+  </Link>
+  </div>
+  </div>
+  </div>
 
       <div className="mx-auto max-w-6xl px-6 py-6 space-y-6">
 
         {pending && (
-          <div className="rounded-xl border border-gray-200 bg-white p-6 animate-pulse shadow-sm">
-            <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
-            <div className="h-3 bg-gray-200 rounded w-11/12 mb-2" />
-            <div className="h-3 bg-gray-200 rounded w-10/12" />
-            <p className="text-xs text-gray-500 mt-2">Analyzing attention span and placement opportunities…</p>
-          </div>
+        <div className="border-4 border-black bg-white p-6 animate-pulse shadow-[6px_6px_0_0_#000] rounded-none">
+        <div className="h-4 bg-gray-200 rounded-none w-1/3 mb-3" />
+        <div className="h-3 bg-gray-200 rounded-none w-11/12 mb-2" />
+        <div className="h-3 bg-gray-200 rounded-none w-10/12" />
+        <p className="text-xs text-gray-500 mt-2">Analyzing attention span and placement opportunities…</p>
+        </div>
         )}
 
         {!pending && error && (
-          <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-700">{error}</div>
+        <div className="border-4 border-black bg-red-50 p-4 text-sm text-red-700 rounded-none">{error}</div>
         )}
 
         {!pending && !error && (!structured || (structured?.suggestions || []).length === 0) && (
-          <div className="rounded-xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-900">
-            No placement suggestions found. You can still insert study items after dense slides or topic transitions.
-          </div>
+        <div className="border-4 border-black bg-amber-50 p-5 text-sm text-amber-900 rounded-none">
+        No placement suggestions found. You can still insert study items after dense slides or topic transitions.
+        </div>
         )}
 
         {!pending && !error && structured && (
-          <section className="space-y-5">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Timeline by Slide</h2>
-            </div>
-            
-            {/* Session Management */}
-            <SessionManager
-              pptFileName={fileName || undefined}
-              pptSessionId={pptSessionId}
-              flashcards={[]} // Will be populated from study page
-              quizzes={[]} // Will be populated from study page
-            />
+        <section className="space-y-5">
+        <div className="flex items-center justify-between">
+        <h2 className="text-lg font-extrabold uppercase tracking-tight text-gray-900">Timeline by Slide</h2>
+        </div>
 
-            {/* PPTX Generator */}
-            <div className="flex justify-center">
-              <PPTXGenerator
-                pptFileName={fileName || "Presentation"}
-                pptSessionId={pptSessionId}
-                flashcards={[]} // Will be populated from study page
-                quizzes={[]} // Will be populated from study page
-              />
-            </div>
-            {/* Add row */}
-            <div className="rounded-xl border border-dashed border-gray-300 p-4 bg-white shadow-sm">
+        {/* Session Management */}
+        <SessionManager
+        pptFileName={fileName || undefined}
+        pptSessionId={pptSessionId}
+        flashcards={[]} // Will be populated from study page
+        quizzes={[]} // Will be populated from study page
+        />
+
+        {/* PPTX Generator */}
+        <div className="flex justify-center">
+        <PPTXGenerator
+        pptFileName={fileName || "Presentation"}
+        pptSessionId={pptSessionId}
+        flashcards={[]} // Will be populated from study page
+        quizzes={[]} // Will be populated from study page
+        />
+        </div>
+        {/* Add row */}
+        <div className="border-4 border-dashed border-black p-4 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 <div className="md:col-span-2">
                   <label className="block text-xs text-gray-600 mb-1">Slide</label>
@@ -323,26 +323,26 @@ export default function PlacementPage() {
                   />
                 </div>
                 <div className="md:col-span-2 flex items-end">
-                  <button
-                    onClick={addSuggestion}
-                    disabled={!newRow.reason.trim()}
-                    className="w-full rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 disabled:opacity-50"
-                  >
-                    Add
-                  </button>
+                <button
+                onClick={addSuggestion}
+                disabled={!newRow.reason.trim()}
+                className="w-full border-4 border-black bg-black px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-white shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-800 disabled:opacity-50"
+                >
+                Add
+                </button>
                 </div>
               </div>
             </div>
             <div className="space-y-3">
               {groupedBySlide.map(([slideNo, items]) => (
-                <div key={slideNo} className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-semibold text-gray-900">Slide {slideNo}</div>
-                    <div className="text-xs text-gray-500">{items.length} suggestion{items.length !== 1 ? "s" : ""}</div>
-                  </div>
-                  <div className="space-y-3">
-                    {items.map((s) => (
-                      <div key={s._idx} className="grid grid-cols-1 md:grid-cols-12 gap-3 border rounded-lg p-3">
+              <div key={slideNo} className="border-4 border-black p-4 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+              <div className="flex items-center justify-between mb-2">
+              <div className="text-sm font-extrabold uppercase tracking-tight text-gray-900">Slide {slideNo}</div>
+              <div className="text-xs text-gray-500">{items.length} suggestion{items.length !== 1 ? "s" : ""}</div>
+              </div>
+              <div className="space-y-3">
+              {items.map((s) => (
+              <div key={s._idx} className="grid grid-cols-1 md:grid-cols-12 gap-3 border-4 border-black p-3 bg-white rounded-none shadow-[6px_6px_0_0_#000]">
                         <div className="md:col-span-3">
                           <label className="block text-[10px] text-gray-600 mb-1">Type</label>
                           <div className="inline-flex overflow-hidden rounded-md border bg-gray-50">
@@ -396,12 +396,12 @@ export default function PlacementPage() {
                           />
                         </div>
                         <div className="md:col-span-1 flex items-end">
-                          <button
-                            onClick={() => deleteSuggestion(s._idx)}
-                            className="w-full rounded-md bg-rose-600 px-2 py-2 text-xs font-medium text-white hover:bg-rose-700"
-                          >
-                            Delete
-                          </button>
+                        <button
+                        onClick={() => deleteSuggestion(s._idx)}
+                        className="w-full border-4 border-black bg-black px-2 py-2 text-xs font-extrabold uppercase tracking-tight text-white rounded-none hover:bg-gray-800"
+                        >
+                        Delete
+                        </button>
                         </div>
                       </div>
                     ))}
