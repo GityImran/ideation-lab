@@ -86,10 +86,10 @@ export default function StudentFlashcardsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading flashcards...</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center border-4 border-black p-8 bg-lime-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <div className="animate-spin rounded-none h-12 w-12 border-4 border-black mx-auto mb-4 border-t-white"></div>
+          <p className="text-black font-extrabold text-lg uppercase">Loading flashcards...</p>
         </div>
       </div>
     )
@@ -97,14 +97,14 @@ export default function StudentFlashcardsPage() {
 
   if (error || flashcards.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <Card className="w-full max-w-md mx-4">
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Card className="w-full max-w-md mx-4 border-4 border-black bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
           <CardContent className="p-6 text-center">
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">Session Not Found</h1>
-            <p className="text-gray-600 mb-4">
+            <h1 className="text-2xl font-extrabold text-black mb-2 uppercase">Session Not Found</h1>
+            <p className="text-black mb-4 font-bold">
               {error || "No flashcards available for this session."}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-black font-bold uppercase">
               Session ID: {sessionId}
             </p>
           </CardContent>
@@ -114,50 +114,50 @@ export default function StudentFlashcardsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Flashcards</h1>
-          <p className="text-gray-600">Session: {sessionId}</p>
+        <div className="text-center mb-8 border-4 border-black p-6 bg-cyan-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Flashcards</h1>
+          <p className="text-black font-bold text-lg">Session: {sessionId}</p>
           <div className="flex items-center justify-center gap-2 mt-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm text-gray-600">Live Session</span>
+            <div className="w-3 h-3 bg-black rounded-none border-2 border-black"></div>
+            <span className="text-sm text-black font-extrabold uppercase">Live Session</span>
           </div>
         </div>
 
         {/* Progress */}
-        <div className="text-center mb-6">
-          <span className="text-sm text-gray-600">
+        <div className="text-center mb-6 border-4 border-black p-4 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+          <span className="text-sm text-black font-extrabold uppercase">
             Card {currentIndex + 1} of {flashcards.length}
           </span>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+          <div className="w-full bg-black rounded-none h-4 mt-2 border-2 border-black">
+            <div
+              className="bg-yellow-400 h-4 rounded-none transition-all duration-300"
               style={{ width: `${((currentIndex + 1) / flashcards.length) * 100}%` }}
             ></div>
           </div>
         </div>
 
         {/* Flashcard */}
-        <Card className="mb-8 shadow-lg">
+        <Card className="mb-8 border-4 border-black bg-pink-400 shadow-[8px_8px_0_0_#000] rounded-none">
           <CardContent className="p-8 min-h-[300px] flex flex-col justify-center">
             <div className="text-center">
               <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                <h2 className="text-2xl font-extrabold text-black mb-4 uppercase">
                   {flashcards[currentIndex]?.question}
                 </h2>
-                
+
                 {showAnswer ? (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <p className="text-lg text-green-800 font-medium">
+                  <div className="bg-black border-4 border-black rounded-none p-4">
+                    <p className="text-lg text-white font-extrabold uppercase">
                       {flashcards[currentIndex]?.answer}
                     </p>
                   </div>
                 ) : (
-                  <Button 
+                  <Button
                     onClick={() => setShowAnswer(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3"
+                    className="bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] px-6 py-3"
                   >
                     Show Answer
                   </Button>
@@ -169,27 +169,27 @@ export default function StudentFlashcardsPage() {
 
         {/* Controls */}
         <div className="flex items-center justify-between">
-          <Button 
+          <Button
             onClick={prevCard}
             variant="outline"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-gray-200 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
           >
             <ArrowLeft className="w-4 h-4" />
             Previous
           </Button>
 
-          <Button 
+          <Button
             onClick={resetCards}
             variant="outline"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-gray-200 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
           >
             <RotateCcw className="w-4 h-4" />
             Reset
           </Button>
 
-          <Button 
+          <Button
             onClick={nextCard}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+            className="flex items-center gap-2 bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
           >
             Next
             <ArrowRight className="w-4 h-4" />
@@ -197,8 +197,8 @@ export default function StudentFlashcardsPage() {
         </div>
 
         {/* Instructions */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
+        <div className="mt-8 text-center border-4 border-black p-4 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+          <p className="text-sm text-black font-extrabold uppercase">
             Tap "Show Answer" to reveal the answer, then use Previous/Next to navigate
           </p>
         </div>

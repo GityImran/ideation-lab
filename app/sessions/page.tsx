@@ -161,39 +161,39 @@ export default function AdvancedSessionManager() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Advanced Session Manager</h1>
-          <p className="text-gray-600">Manage all your learning sessions across presentations</p>
+        <div className="mb-8 border-4 border-black p-6 bg-cyan-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Advanced Session Manager</h1>
+          <p className="text-black font-bold text-lg">Manage all your learning sessions across presentations</p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-4 border-black bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <QrCode className="w-6 h-6 text-blue-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <QrCode className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Sessions</p>
-                  <p className="text-2xl font-bold text-gray-900">{sessions.length}</p>
+                  <p className="text-sm font-extrabold text-black uppercase">Total Sessions</p>
+                  <p className="text-3xl font-black text-black">{sessions.length}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-4 border-black bg-green-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Play className="w-6 h-6 text-green-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <Play className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Active Sessions</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-extrabold text-black uppercase">Active Sessions</p>
+                  <p className="text-3xl font-black text-black">
                     {sessions.filter(s => s.isActive).length}
                   </p>
                 </div>
@@ -201,15 +201,15 @@ export default function AdvancedSessionManager() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-4 border-black bg-purple-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Users className="w-6 h-6 text-purple-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <Users className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Participants</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-extrabold text-black uppercase">Total Participants</p>
+                  <p className="text-3xl font-black text-black">
                     {sessions.reduce((sum, s) => sum + s.participants.length, 0)}
                   </p>
                 </div>
@@ -217,15 +217,15 @@ export default function AdvancedSessionManager() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-4 border-black bg-yellow-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-orange-100 rounded-lg">
-                  <Clock className="w-6 h-6 text-orange-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <Clock className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Presentations</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-extrabold text-black uppercase">Presentations</p>
+                  <p className="text-3xl font-black text-black">
                     {Object.keys(groupedSessions).length}
                   </p>
                 </div>
@@ -235,7 +235,7 @@ export default function AdvancedSessionManager() {
         </div>
 
         {/* Filters */}
-        <Card className="mb-6">
+        <Card className="mb-6 border-4 border-black bg-pink-400 shadow-[6px_6px_0_0_#000] rounded-none">
           <CardContent className="p-6">
             <div className="flex flex-wrap gap-4 items-center">
               <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export default function AdvancedSessionManager() {
                   placeholder="Search sessions..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-64"
+                  className="w-64 border-2 border-black bg-white font-bold rounded-none"
                 />
               </div>
               
@@ -253,7 +253,7 @@ export default function AdvancedSessionManager() {
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value as any)}
-                  className="px-3 py-2 border rounded-md"
+                  className="px-3 py-2 border-2 border-black bg-white font-bold rounded-none"
                 >
                   <option value="all">All Types</option>
                   <option value="flashcards">Flashcards</option>
@@ -265,7 +265,7 @@ export default function AdvancedSessionManager() {
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as any)}
-                  className="px-3 py-2 border rounded-md"
+                  className="px-3 py-2 border-2 border-black bg-white font-bold rounded-none"
                 >
                   <option value="all">All Status</option>
                   <option value="active">Active Only</option>
@@ -277,7 +277,7 @@ export default function AdvancedSessionManager() {
                 onClick={fetchSessions}
                 disabled={loading}
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
                 Refresh
@@ -306,18 +306,18 @@ export default function AdvancedSessionManager() {
             </Card>
           ) : (
             Object.values(groupedSessions).map((group) => (
-              <Card key={group.pptSessionId}>
+              <Card key={group.pptSessionId} className="border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                  <CardTitle className="flex items-center justify-between font-extrabold text-black text-xl uppercase">
                     <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-black rounded-none border-2 border-black"></div>
                       <span>{group.pptFileName}</span>
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="bg-yellow-400 text-black border-2 border-black font-extrabold rounded-none">
                         {group.sessions.length} sessions
                       </Badge>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={group.sessions.some(s => s.isActive) ? "default" : "secondary"}>
+                      <Badge variant={group.sessions.some(s => s.isActive) ? "default" : "secondary"} className="bg-green-400 text-black border-2 border-black font-extrabold rounded-none">
                         {group.sessions.filter(s => s.isActive).length} Active
                       </Badge>
                     </div>

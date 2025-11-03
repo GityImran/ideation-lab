@@ -28,21 +28,21 @@ export function SessionResetCard() {
   }
 
   return (
-    <Card className="border-red-200 bg-red-50">
+    <Card className="max-w-lg mx-auto border-4 border-black bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
       <CardHeader>
-        <CardTitle className="text-red-800 flex items-center gap-2">
+        <CardTitle className="text-black flex items-center gap-2 font-extrabold text-lg">
           <AlertTriangle className="w-5 h-5" />
           Session Management
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-red-700 mb-4">
+        <p className="text-sm text-black mb-4 font-bold">
           If you're experiencing issues with old PPT data persisting, you can clear all session data and start fresh.
         </p>
         
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="flex items-center gap-2">
+            <Button variant="destructive" className="flex items-center gap-2 bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] rounded-none font-extrabold">
               <Trash2 className="w-4 h-4" />
               Clear All Session Data
             </Button>
@@ -56,8 +56,8 @@ export function SessionResetCard() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleClearAllData} className="bg-red-600 hover:bg-red-700">
+              <AlertDialogCancel className="bg-gray-200 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold">Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleClearAllData} className="bg-red-600 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
                 Clear All Data
               </AlertDialogAction>
             </AlertDialogFooter>

@@ -115,10 +115,10 @@ export default function StudentQuizPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading quiz...</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center border-4 border-black p-8 bg-orange-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <div className="animate-spin rounded-none h-12 w-12 border-4 border-black mx-auto mb-4 border-t-white"></div>
+          <p className="text-black font-extrabold text-lg uppercase">Loading quiz...</p>
         </div>
       </div>
     )
@@ -126,14 +126,14 @@ export default function StudentQuizPage() {
 
   if (error || quizzes.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center">
-        <Card className="w-full max-w-md mx-4">
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Card className="w-full max-w-md mx-4 border-4 border-black bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
           <CardContent className="p-6 text-center">
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">Session Not Found</h1>
-            <p className="text-gray-600 mb-4">
+            <h1 className="text-2xl font-extrabold text-black mb-2 uppercase">Session Not Found</h1>
+            <p className="text-black mb-4 font-bold">
               {error || "No quiz available for this session."}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-black font-bold uppercase">
               Session ID: {sessionId}
             </p>
           </CardContent>
@@ -143,17 +143,17 @@ export default function StudentQuizPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 py-8 px-4">
+    <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Live Quiz</h1>
-          <p className="text-gray-600">Session: {sessionId}</p>
+        <div className="text-center mb-8 border-4 border-black p-6 bg-magenta-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Live Quiz</h1>
+          <p className="text-black font-bold text-lg">Session: {sessionId}</p>
           <div className="flex items-center justify-center gap-2 mt-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm text-gray-600">Live Session</span>
+          <div className="w-3 h-3 bg-black rounded-none border-2 border-black"></div>
+          <span className="text-sm text-black font-extrabold uppercase">Live Session</span>
           </div>
-        </div>
+          </div>
 
         {/* Score Display */}
         {answeredQuestions.size > 0 && (

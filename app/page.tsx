@@ -54,12 +54,12 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-yellow-100">
       {/* New Tubelight Navigation */}
       <NavBar items={navItems} />
 
       {/* Hero Section */}
-      <section className="bg-[#f8f9fa] py-12 sm:py-20 px-4 sm:px-6 lg:px-8 pt-16 sm:pt-32">
+      <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8 pt-16 sm:pt-32 border-4 border-black shadow-[8px_8px_0_0_#000] rounded-none">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-16 items-center">
             {/* Hero Content */}
@@ -76,11 +76,11 @@ export default function LandingPage() {
               {/* Email Signup Form */}
               <div className="flex flex-col sm:flex-row gap-4 max-w-lg">
                 <input
-                  type="email"
-                  placeholder="Enter your school email"
-                  className="flex-1 px-4 py-3 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                type="email"
+                placeholder="Enter your school email"
+                className="flex-1 px-4 py-3 bg-white border-2 border-black rounded-none font-bold focus:outline-none"
                 />
-                <Button onClick={() => {router.push("/ppt")}} className="bg-[#1a1a1a] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2">
+                <Button onClick={() => {router.push("/ppt")}} className="bg-black text-white px-6 py-3 border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] flex items-center gap-2">
                   Get Started
                   <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -273,20 +273,20 @@ export default function LandingPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 to-indigo-700">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-black border-4 border-black shadow-[8px_8px_0_0_#000] rounded-none">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 text-center text-white">
             <div>
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 sm:mb-4">10x</div>
-              <div className="text-lg sm:text-xl opacity-90">More Classroom Engagement</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 sm:mb-4 uppercase">10x</div>
+              <div className="text-lg sm:text-xl font-bold">More Classroom Engagement</div>
             </div>
             <div>
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 sm:mb-4">100+ </div>
-              <div className="text-lg sm:text-xl opacity-90">Hours saved</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 sm:mb-4 uppercase">100+ </div>
+              <div className="text-lg sm:text-xl font-bold">Hours saved</div>
             </div>
             <div>
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 sm:mb-4">95%</div>
-              <div className="text-lg sm:text-xl opacity-90">Student Engagement Rate</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 sm:mb-4 uppercase">95%</div>
+              <div className="text-lg sm:text-xl font-bold">Student Engagement Rate</div>
             </div>
           </div>
         </div>
@@ -387,26 +387,26 @@ export default function LandingPage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 to-black">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white border-4 border-black shadow-[8px_8px_0_0_#000] rounded-none">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-            Take the First Step Toward{" "}
-            <span className="bg-gradient-to-r from-yellow-400 to-lime-400 bg-clip-text text-transparent">
-              Smarter Classrooms
-            </span>
-          </h2>
-          <p className="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-12 leading-relaxed">
-            Join thousands of educators transforming their teaching experience
-          </p>
-          <Button size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 sm:px-12 py-4 sm:py-6 text-base sm:text-xl">
-            Start Free Trial
-            <ArrowRight className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6" />
-          </Button>
+        <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-black mb-4 sm:mb-6 leading-tight uppercase">
+        Take the First Step Toward{" "}
+        <span className="bg-yellow-400 text-black px-2">
+        Smarter Classrooms
+        </span>
+        </h2>
+        <p className="text-lg sm:text-xl text-black mb-8 sm:mb-12 leading-relaxed font-bold">
+        Join thousands of educators transforming their teaching experience
+        </p>
+        <Button size="lg" className="bg-black text-white border-2 border-black shadow-[6px_6px_0_0_#000] font-extrabold px-6 sm:px-12 py-4 sm:py-6 text-base sm:text-xl rounded-none hover:shadow-[8px_8px_0_0_#000]">
+        Start Free Trial
+        <ArrowRight className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6" />
+        </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="bg-gray-900 text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <footer id="contact" className="bg-black text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-4 border-black shadow-[8px_8px_0_0_#000] rounded-none">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8 sm:mb-12">
             <div>

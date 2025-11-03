@@ -71,35 +71,35 @@ export default function TeacherDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center border-4 border-black p-8 bg-purple-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <div className="animate-spin rounded-none h-12 w-12 border-4 border-black mx-auto mb-4 border-t-white"></div>
+          <p className="text-black font-extrabold text-lg uppercase">Loading dashboard...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Teacher Dashboard</h1>
-          <p className="text-gray-600">Monitor your active learning sessions</p>
+        <div className="mb-8 border-4 border-black p-6 bg-blue-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Teacher Dashboard</h1>
+          <p className="text-black font-bold text-lg">Monitor your active learning sessions</p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+          <Card className="border-4 border-black bg-green-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <QrCode className="w-6 h-6 text-blue-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <QrCode className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Active Sessions</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-extrabold text-black uppercase">Active Sessions</p>
+                  <p className="text-3xl font-black text-black">
                     {sessions.filter(s => s.isActive).length}
                   </p>
                 </div>
@@ -107,15 +107,15 @@ export default function TeacherDashboard() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-4 border-black bg-pink-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Users className="w-6 h-6 text-green-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <Users className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Participants</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-extrabold text-black uppercase">Total Participants</p>
+                  <p className="text-3xl font-black text-black">
                     {sessions.reduce((sum, s) => sum + s.participants.length, 0)}
                   </p>
                 </div>
@@ -123,16 +123,16 @@ export default function TeacherDashboard() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-4 border-black bg-orange-400 shadow-[6px_6px_0_0_#000] rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Clock className="w-6 h-6 text-purple-600" />
+                <div className="p-2 bg-black rounded-none border-2 border-black">
+                  <Clock className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Sessions Today</p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {sessions.filter(s => 
+                  <p className="text-sm font-extrabold text-black uppercase">Sessions Today</p>
+                  <p className="text-3xl font-black text-black">
+                    {sessions.filter(s =>
                       new Date(s.createdAt).toDateString() === new Date().toDateString()
                     ).length}
                   </p>
@@ -144,17 +144,17 @@ export default function TeacherDashboard() {
 
         {/* Sessions List */}
         <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-gray-900">Active Sessions</h2>
+          <h2 className="text-2xl font-extrabold text-black uppercase tracking-tight border-4 border-black bg-yellow-400 p-4 shadow-[6px_6px_0_0_#000] rounded-none">Active Sessions</h2>
           
           {sessions.length === 0 ? (
-            <Card>
+            <Card className="border-4 border-black bg-gray-200 shadow-[6px_6px_0_0_#000] rounded-none">
               <CardContent className="p-8 text-center">
-                <QrCode className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Sessions</h3>
-                <p className="text-gray-600 mb-4">
+                <QrCode className="w-12 h-12 text-black mx-auto mb-4" />
+                <h3 className="text-xl font-extrabold text-black mb-2 uppercase">No Active Sessions</h3>
+                <p className="text-black mb-4 font-bold">
                   Generate QR codes from your study materials to start live sessions
                 </p>
-                <Button asChild>
+                <Button asChild className="bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
                   <a href="/ppt">Go to Study Materials</a>
                 </Button>
               </CardContent>
@@ -162,14 +162,14 @@ export default function TeacherDashboard() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {sessions.map((session) => (
-                <Card key={session.sessionId} className="hover:shadow-lg transition-shadow">
+                <Card key={session.sessionId} className="border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">
+                      <CardTitle className="text-xl font-extrabold text-black uppercase">
                         {session.type === "flashcards" ? "📚 Flashcards" : "❓ Quiz"}
                       </CardTitle>
                       <div className="flex items-center gap-2">
-                        <Badge variant={session.isActive ? "default" : "secondary"}>
+                        <Badge variant={session.isActive ? "default" : "secondary"} className="bg-black text-white border-2 border-black font-extrabold rounded-none">
                           {session.isActive ? "Active" : "Inactive"}
                         </Badge>
                         {session.isActive && (
@@ -177,6 +177,7 @@ export default function TeacherDashboard() {
                             size="sm"
                             variant="outline"
                             onClick={() => deactivateSession(session.sessionId)}
+                            className="bg-red-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
                           >
                             <EyeOff className="w-4 h-4" />
                           </Button>
@@ -186,7 +187,7 @@ export default function TeacherDashboard() {
                   </CardHeader>
                   
                   <CardContent className="space-y-4">
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 text-sm text-black font-bold">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         <span>{formatTime(session.createdAt)}</span>
@@ -198,8 +199,8 @@ export default function TeacherDashboard() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">Items:</span>
-                      <Badge variant="outline">
+                      <span className="text-sm text-black font-bold uppercase">Items:</span>
+                      <Badge variant="outline" className="bg-yellow-400 text-black border-2 border-black font-extrabold rounded-none">
                         {Array.isArray(session.data) ? session.data.length : 0}
                       </Badge>
                     </div>
@@ -216,13 +217,14 @@ export default function TeacherDashboard() {
                         variant="outline"
                         size="sm"
                         onClick={() => window.open(session.studentUrl, "_blank")}
+                        className="bg-blue-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         Preview
                       </Button>
                     </div>
 
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-black font-bold uppercase">
                       Session ID: {session.sessionId}
                     </div>
                   </CardContent>
