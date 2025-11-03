@@ -114,171 +114,169 @@ export default function StudentQuizPage() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center border-4 border-black p-8 bg-orange-400 shadow-[6px_6px_0_0_#000] rounded-none">
-          <div className="animate-spin rounded-none h-12 w-12 border-4 border-black mx-auto mb-4 border-t-white"></div>
-          <p className="text-black font-extrabold text-lg uppercase">Loading quiz...</p>
-        </div>
-      </div>
-    )
+  return (
+  <div className="min-h-screen bg-yellow-100 flex items-center justify-center text-gray-900">
+  <div className="text-center border-4 border-black p-8 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+  <div className="animate-spin rounded-none h-12 w-12 border-4 border-black mx-auto mb-4 border-t-gray-900"></div>
+  <p className="text-gray-900 font-extrabold text-lg uppercase">Loading quiz...</p>
+  </div>
+  </div>
+  )
   }
 
   if (error || quizzes.length === 0) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <Card className="w-full max-w-md mx-4 border-4 border-black bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
-          <CardContent className="p-6 text-center">
-            <h1 className="text-2xl font-extrabold text-black mb-2 uppercase">Session Not Found</h1>
-            <p className="text-black mb-4 font-bold">
-              {error || "No quiz available for this session."}
-            </p>
-            <p className="text-sm text-black font-bold uppercase">
-              Session ID: {sessionId}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    )
+  return (
+  <div className="min-h-screen bg-yellow-100 flex items-center justify-center text-gray-900">
+  <Card className="w-full max-w-md mx-4 border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+  <CardContent className="p-6 text-center">
+  <h1 className="text-2xl font-extrabold text-gray-900 mb-2 uppercase">Session Not Found</h1>
+  <p className="text-gray-900 mb-4 font-bold">
+  {error || "No quiz available for this session."}
+  </p>
+  <p className="text-sm text-gray-900 font-bold uppercase">
+  Session ID: {sessionId}
+  </p>
+  </CardContent>
+  </Card>
+  </div>
+  )
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 border-4 border-black p-6 bg-magenta-400 shadow-[6px_6px_0_0_#000] rounded-none">
-          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Live Quiz</h1>
-          <p className="text-black font-bold text-lg">Session: {sessionId}</p>
-          <div className="flex items-center justify-center gap-2 mt-2">
-          <div className="w-3 h-3 bg-black rounded-none border-2 border-black"></div>
-          <span className="text-sm text-black font-extrabold uppercase">Live Session</span>
-          </div>
-          </div>
+  <div className="min-h-screen bg-yellow-100 py-12 px-6 text-gray-900">
+  <div className="max-w-2xl mx-auto space-y-10">
+  {/* Header */}
+  <div className="text-center border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+  <h1 className="text-4xl font-extrabold text-gray-900 mb-3 uppercase tracking-tight">Live Quiz</h1>
+  <p className="text-lg font-medium">Session: {sessionId}</p>
+  <div className="flex items-center justify-center gap-2 mt-2">
+  <div className="w-3 h-3 bg-black rounded-none border-2 border-black"></div>
+  <span className="text-sm text-gray-900 font-extrabold uppercase">Live Session</span>
+  </div>
+  </div>
 
-        {/* Score Display */}
-        {answeredQuestions.size > 0 && (
-          <div className="text-center mb-6">
-            <div className="bg-white rounded-lg p-4 shadow-sm inline-block">
-              <p className="text-sm text-gray-600">Your Score</p>
-              <p className="text-2xl font-bold text-purple-600">
-                {score}/{answeredQuestions.size} ({getScorePercentage()}%)
-              </p>
-            </div>
-          </div>
-        )}
+  {/* Score Display */}
+  {answeredQuestions.size > 0 && (
+  <div className="text-center border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+  <p className="text-sm text-gray-600 font-extrabold uppercase">Your Score</p>
+  <p className="text-2xl font-extrabold text-gray-900 uppercase">
+  {score}/{answeredQuestions.size} ({getScorePercentage()}%)
+  </p>
+  </div>
+  )}
 
-        {/* Progress */}
-        <div className="text-center mb-6">
-          <span className="text-sm text-gray-600">
-            Question {currentIndex + 1} of {quizzes.length}
-          </span>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div 
-              className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${((currentIndex + 1) / quizzes.length) * 100}%` }}
-            ></div>
-          </div>
-        </div>
+  {/* Progress */}
+        <div className="border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none text-center">
+    <span className="text-sm text-gray-900 font-extrabold uppercase">
+      Question {currentIndex + 1} of {quizzes.length}
+  </span>
+  <div className="w-full bg-black rounded-none h-4 mt-2 border-2 border-black">
+    <div
+      className="bg-yellow-400 h-4 rounded-none transition-all duration-300"
+    style={{ width: `${((currentIndex + 1) / quizzes.length) * 100}%` }}
+  ></div>
+  </div>
+  </div>
 
         {/* Quiz Question */}
-        <Card className="mb-8 shadow-lg">
-          <CardContent className="p-8">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                {quizzes[currentIndex]?.question}
-              </h2>
-              
-              <div className="space-y-3">
-                {quizzes[currentIndex]?.options.map((option, index) => {
-                  const isCorrect = index === quizzes[currentIndex].correctIndex
-                  const isSelected = selectedAnswer === index
-                  
-                  let buttonClass = "w-full text-left rounded-lg px-4 py-3 text-sm border transition-all"
-                  
-                  if (showResult) {
-                    if (isCorrect) {
-                      buttonClass += " bg-green-50 border-green-300 text-green-800"
-                    } else if (isSelected) {
-                      buttonClass += " bg-red-50 border-red-300 text-red-800"
-                    } else {
-                      buttonClass += " bg-gray-50 border-gray-200 text-gray-600"
-                    }
-                  } else {
-                    buttonClass += " bg-white border-gray-200 text-gray-800 hover:bg-gray-50 hover:border-gray-300"
-                  }
+        <Card className="mb-8 border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+        <CardContent className="p-8">
+        <div className="text-center mb-6">
+        <h2 className="text-xl font-extrabold uppercase tracking-tight text-gray-900 mb-6">
+        {quizzes[currentIndex]?.question}
+        </h2>
 
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => handleAnswerSelect(index)}
-                      disabled={showResult}
-                      className={buttonClass}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span>{option}</span>
-                        {showResult && isCorrect && (
-                          <CheckCircle className="w-5 h-5 text-green-600" />
-                        )}
-                        {showResult && isSelected && !isCorrect && (
-                          <XCircle className="w-5 h-5 text-red-600" />
-                        )}
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
+        <div className="space-y-3">
+        {quizzes[currentIndex]?.options.map((option, index) => {
+        const isCorrect = index === quizzes[currentIndex].correctIndex
+        const isSelected = selectedAnswer === index
 
-              {showResult && (
-                <div className="mt-4 p-3 rounded-lg bg-blue-50 border border-blue-200">
-                  <p className="text-sm text-blue-800">
-                    {selectedAnswer === quizzes[currentIndex].correctIndex ? (
-                      <span className="font-medium">✓ Correct! Well done!</span>
-                    ) : (
-                      <span>
-                        ✗ Not quite. The correct answer is: <strong>{quizzes[currentIndex].options[quizzes[currentIndex].correctIndex]}</strong>
-                      </span>
-                    )}
-                  </p>
-                </div>
-              )}
-            </div>
-          </CardContent>
+        let buttonClass = "w-full text-left border-4 border-black px-4 py-3 text-sm font-extrabold uppercase rounded-none transition-all"
+
+        if (showResult) {
+        if (isCorrect) {
+        buttonClass += " bg-green-100 border-green-300 text-green-800"
+        } else if (isSelected) {
+        buttonClass += " bg-red-100 border-red-300 text-red-800"
+        } else {
+        buttonClass += " bg-gray-100 border-gray-200 text-gray-600"
+        }
+        } else {
+        buttonClass += " bg-white text-gray-900 hover:bg-gray-100"
+        }
+
+        return (
+        <button
+        key={index}
+        onClick={() => handleAnswerSelect(index)}
+        disabled={showResult}
+        className={buttonClass}
+        >
+        <div className="flex items-center justify-between">
+        <span>{option}</span>
+        {showResult && isCorrect && (
+        <CheckCircle className="w-5 h-5 text-green-600" />
+        )}
+        {showResult && isSelected && !isCorrect && (
+        <XCircle className="w-5 h-5 text-red-600" />
+        )}
+        </div>
+        </button>
+        )
+        })}
+        </div>
+
+        {showResult && (
+        <div className="mt-4 p-3 border-4 border-black bg-white rounded-none">
+        <p className="text-sm text-gray-900 font-extrabold uppercase">
+        {selectedAnswer === quizzes[currentIndex].correctIndex ? (
+        <span>✓ Correct! Well done!</span>
+        ) : (
+        <span>
+        ✗ Not quite. The correct answer is: <strong>{quizzes[currentIndex].options[quizzes[currentIndex].correctIndex]}</strong>
+        </span>
+        )}
+        </p>
+        </div>
+        )}
+        </div>
+        </CardContent>
         </Card>
 
         {/* Controls */}
         <div className="flex items-center justify-between">
-          <Button 
-            onClick={prevQuestion}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Previous
-          </Button>
+        <Button
+        onClick={prevQuestion}
+        variant="outline"
+        className="flex items-center gap-2 border-4 border-black bg-white text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none font-extrabold uppercase hover:bg-gray-100"
+        >
+        <ArrowLeft className="w-4 h-4" />
+        Previous
+        </Button>
 
-          <Button 
-            onClick={resetQuiz}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <RotateCcw className="w-4 h-4" />
-            Reset
-          </Button>
+        <Button
+        onClick={resetQuiz}
+        variant="outline"
+        className="flex items-center gap-2 border-4 border-black bg-white text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none font-extrabold uppercase hover:bg-gray-100"
+        >
+        <RotateCcw className="w-4 h-4" />
+        Reset
+        </Button>
 
-          <Button 
-            onClick={nextQuestion}
-            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
-          >
-            Next
-            <ArrowRight className="w-4 h-4" />
-          </Button>
+        <Button
+        onClick={nextQuestion}
+        className="flex items-center gap-2 border-4 border-black bg-black text-white shadow-[6px_6px_0_0_#000] rounded-none font-extrabold uppercase hover:bg-gray-800"
+        >
+        Next
+        <ArrowRight className="w-4 h-4" />
+        </Button>
         </div>
 
         {/* Instructions */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            Select your answer and see immediate feedback
-          </p>
+        <div className="mt-8 text-center border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+        <p className="text-sm text-gray-900 font-extrabold uppercase">
+        Select your answer and see immediate feedback
+        </p>
         </div>
       </div>
     </div>
