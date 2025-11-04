@@ -18,36 +18,47 @@ export default function StudentFlashcardsPage() {
   const [error, setError] = useState("")
 
   useEffect(() => {
+    // In a real app, you'd fetch session data from your database
+    // For demo purposes, we'll try to get it from sessionStorage
+    // or generate sample data
     const loadSessionData = async () => {
       try {
         setLoading(true)
-        setError("")
         
-        // Fetch from API - this gets the actual flashcards from the session
+        // Try to fetch from API first
         const response = await fetch(`/api/session?sessionId=${sessionId}&type=flashcards`)
-        
         if (response.ok) {
           const sessionData = await response.json()
-          const flashcards = sessionData.data || []
-          
-          if (Array.isArray(flashcards) && flashcards.length > 0) {
-            setFlashcards(flashcards)
-          } else {
-            setError("No flashcards available in this session")
-          }
-        } else {
-          const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
-          if (response.status === 404) {
-            setError("Session not found. The session may have expired or been deleted.")
-          } else if (response.status === 410) {
-            setError("This session is no longer active.")
-          } else {
-            setError(errorData.error || "Failed to load flashcards from session")
-          }
+          setFlashcards(sessionData.data || [])
+          return
         }
-      } catch (err: any) {
-        console.error("Error loading flashcards:", err)
-        setError(err?.message || "Failed to load flashcards. Please check your connection and try again.")
+        
+        // Fallback: Try to get flashcards from sessionStorage (if teacher is on same device)
+        const storedFlashcards = sessionStorage.getItem(`flashcards_${sessionId}`)
+        if (storedFlashcards) {
+          const parsed = JSON.parse(storedFlashcards)
+          setFlashcards(parsed)
+        } else {
+          // Generate sample flashcards for demo
+          const sampleFlashcards: Flashcard[] = [
+            {
+              question: "What is the powerhouse of the cell?",
+              answer: "Mitochondria"
+            },
+            {
+              question: "What process converts light energy to chemical energy?",
+              answer: "Photosynthesis"
+            },
+            {
+              question: "What is the basic unit of life?",
+              answer: "Cell"
+            }
+          ]
+          setFlashcards(sampleFlashcards)
+        }
+      } catch (err) {
+        setError("Failed to load flashcards")
+        console.error(err)
       } finally {
         setLoading(false)
       }
@@ -55,9 +66,6 @@ export default function StudentFlashcardsPage() {
 
     if (sessionId) {
       loadSessionData()
-    } else {
-      setError("Invalid session ID")
-      setLoading(false)
     }
   }, [sessionId])
 

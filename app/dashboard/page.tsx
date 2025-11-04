@@ -16,166 +16,39 @@ interface SessionData {
   studentUrl: string
   isActive: boolean
   participants: string[]
-  pptFileName?: string
-  pptSessionId?: string
 }
 
 export default function TeacherDashboard() {
   const [sessions, setSessions] = useState<SessionData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [useMockData, setUseMockData] = useState(false)
-
-  // Generate mock sessions data
-  const generateMockSessions = (): SessionData[] => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-    const now = new Date()
-    
-    const mockFlashcards = [
-      { question: "What is the powerhouse of the cell?", answer: "Mitochondria" },
-      { question: "What process converts light energy to chemical energy?", answer: "Photosynthesis" },
-      { question: "What is the basic unit of life?", answer: "Cell" },
-      { question: "What is DNA?", answer: "Deoxyribonucleic acid - the genetic material" },
-      { question: "What is the process of cell division called?", answer: "Mitosis" },
-      { question: "What organelle contains DNA?", answer: "Nucleus" },
-      { question: "What is the function of ribosomes?", answer: "Protein synthesis" },
-      { question: "What is ATP?", answer: "Adenosine triphosphate - energy currency of cells" }
-    ]
-
-    const mockQuizzes = [
-      {
-        question: "What is the powerhouse of the cell?",
-        options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
-        correctIndex: 1
-      },
-      {
-        question: "What process converts light energy to chemical energy?",
-        options: ["Respiration", "Photosynthesis", "Digestion", "Circulation"],
-        correctIndex: 1
-      },
-      {
-        question: "What is the basic unit of life?",
-        options: ["Tissue", "Organ", "Cell", "Organism"],
-        correctIndex: 2
-      },
-      {
-        question: "Which organelle contains DNA?",
-        options: ["Mitochondria", "Ribosome", "Nucleus", "Endoplasmic reticulum"],
-        correctIndex: 2
-      },
-      {
-        question: "What is the function of ribosomes?",
-        options: ["Energy production", "Protein synthesis", "DNA replication", "Waste removal"],
-        correctIndex: 1
-      }
-    ]
-
-    return [
-      {
-        sessionId: `mock_flashcards_${Date.now()}_1`,
-        type: "flashcards" as const,
-        data: mockFlashcards,
-        createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-        studentUrl: `${baseUrl}/student/mock_flashcards_${Date.now()}_1/flashcards`,
-        isActive: true,
-        participants: ["participant_1", "participant_2", "participant_3"],
-        pptFileName: "Introduction to Cell Biology.pptx",
-        pptSessionId: "ppt_mock_1"
-      },
-      {
-        sessionId: `mock_quiz_${Date.now()}_1`,
-        type: "quiz" as const,
-        data: mockQuizzes,
-        createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(), // 1 hour ago
-        studentUrl: `${baseUrl}/student/mock_quiz_${Date.now()}_1/quiz`,
-        isActive: true,
-        participants: ["participant_4", "participant_5", "participant_6", "participant_7"],
-        pptFileName: "Introduction to Cell Biology.pptx",
-        pptSessionId: "ppt_mock_1"
-      },
-      {
-        sessionId: `mock_flashcards_${Date.now()}_2`,
-        type: "flashcards" as const,
-        data: [
-          { question: "What is JavaScript?", answer: "A programming language for web development" },
-          { question: "What is React?", answer: "A JavaScript library for building user interfaces" },
-          { question: "What is a component?", answer: "A reusable piece of UI code" },
-          { question: "What is state?", answer: "Data that changes over time in a component" },
-          { question: "What is props?", answer: "Properties passed to a component" }
-        ],
-        createdAt: new Date(now.getTime() - 30 * 60 * 1000).toISOString(), // 30 minutes ago
-        studentUrl: `${baseUrl}/student/mock_flashcards_${Date.now()}_2/flashcards`,
-        isActive: true,
-        participants: ["participant_8", "participant_9"],
-        pptFileName: "Web Development Basics.pptx",
-        pptSessionId: "ppt_mock_2"
-      },
-      {
-        sessionId: `mock_quiz_${Date.now()}_2`,
-        type: "quiz" as const,
-        data: [
-          {
-            question: "What is JavaScript?",
-            options: ["A markup language", "A programming language", "A database", "A framework"],
-            correctIndex: 1
-          },
-          {
-            question: "What is React?",
-            options: ["A database", "A JavaScript library", "A programming language", "An operating system"],
-            correctIndex: 1
-          }
-        ],
-        createdAt: new Date(now.getTime() - 15 * 60 * 1000).toISOString(), // 15 minutes ago
-        studentUrl: `${baseUrl}/student/mock_quiz_${Date.now()}_2/quiz`,
-        isActive: false,
-        participants: ["participant_10"],
-        pptFileName: "Web Development Basics.pptx",
-        pptSessionId: "ppt_mock_2"
-      }
-    ]
-  }
-
-  const loadMockData = () => {
-    setUseMockData(true)
-    setSessions(generateMockSessions())
-    setLoading(false)
-    setError(null)
-  }
-
-  const fetchSessions = async () => {
-    if (useMockData) {
-      setSessions(generateMockSessions())
-      return
-    }
-
-    try {
-      setLoading(true)
-      setError(null)
-      const response = await fetch("/api/sessions")
-      if (response.ok) {
-        const data = await response.json()
-        setSessions(data.sessions || [])
-      } else {
-        setError(`Failed to load sessions: ${response.status}`)
-      }
-    } catch (error) {
-      console.error("Failed to fetch sessions:", error)
-      setError("Failed to connect to server")
-    } finally {
-      setLoading(false)
-    }
-  }
 
   useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await fetch("/api/sessions")
+        if (response.ok) {
+          const data = await response.json()
+          setSessions(data.sessions || [])
+        } else {
+          setError(`Failed to load sessions: ${response.status}`)
+        }
+      } catch (error) {
+        console.error("Failed to fetch sessions:", error)
+        setError("Failed to connect to server")
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchSessions()
 
-    // Poll for updates every 5 seconds (only if not using mock data)
-    if (!useMockData) {
-      const interval = setInterval(fetchSessions, 5000)
-      return () => clearInterval(interval)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useMockData])
+    // Poll for updates every 5 seconds
+    const interval = setInterval(fetchSessions, 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   const formatTime = (dateString: string) => {
     return new Date(dateString).toLocaleTimeString()
@@ -186,50 +59,19 @@ export default function TeacherDashboard() {
   }
 
   const deactivateSession = async (sessionId: string) => {
-    if (useMockData) {
-      // Update mock data locally
-      setSessions(prev => prev.map(session => 
-        session.sessionId === sessionId 
-          ? { ...session, isActive: false }
-          : session
-      ))
-      return
-    }
-
     try {
       const response = await fetch(`/api/sessions/${sessionId}`, {
         method: "DELETE"
       })
       if (response.ok) {
-        // Refresh sessions from server
-        await fetchSessions()
+        setSessions(prev => prev.map(session => 
+          session.sessionId === sessionId 
+            ? { ...session, isActive: false }
+            : session
+        ))
       }
     } catch (error) {
       console.error("Failed to deactivate session:", error)
-    }
-  }
-  
-  const reactivateSession = async (sessionId: string) => {
-    if (useMockData) {
-      // Update mock data locally
-      setSessions(prev => prev.map(session => 
-        session.sessionId === sessionId 
-          ? { ...session, isActive: true }
-          : session
-      ))
-      return
-    }
-
-    try {
-      const response = await fetch(`/api/sessions/${sessionId}`, {
-        method: "POST"
-      })
-      if (response.ok) {
-        // Refresh sessions from server
-        await fetchSessions()
-      }
-    } catch (error) {
-      console.error("Failed to reactivate session:", error)
     }
   }
 
@@ -266,65 +108,8 @@ export default function TeacherDashboard() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8 border-4 border-black p-6 bg-blue-400 shadow-[6px_6px_0_0_#000] rounded-none">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Teacher Dashboard</h1>
-              <p className="text-black font-bold text-lg">Monitor your active learning sessions</p>
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              {!useMockData && (
-                <Button
-                  onClick={loadMockData}
-                  className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-yellow-600"
-                >
-                  Load Mock Data
-                </Button>
-              )}
-              {useMockData && (
-                <Button
-                  onClick={() => {
-                    setUseMockData(false)
-                    fetchSessions()
-                  }}
-                  className="bg-green-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-green-600"
-                >
-                  Use Real Data
-                </Button>
-              )}
-            </div>
-          </div>
-          
-          {/* Navigation Links */}
-          <div className="flex gap-2 flex-wrap mb-4">
-            <Link href="/sessions">
-              <Button className="bg-purple-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
-                All Sessions
-              </Button>
-            </Link>
-            <Link href="/ppt/study">
-              <Button className="bg-green-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
-                Study Materials
-              </Button>
-            </Link>
-            <Link href="/ppt">
-              <Button className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
-                Upload PPT
-              </Button>
-            </Link>
-            <Link href="/">
-              <Button variant="outline" className="bg-white text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
-                Home
-              </Button>
-            </Link>
-          </div>
-          
-          {useMockData && (
-            <div className="mt-4 p-3 bg-yellow-200 border-2 border-black rounded-none">
-              <p className="text-sm text-black font-bold uppercase">
-                🎭 Mock Data Mode - Showing sample sessions for demonstration
-              </p>
-            </div>
-          )}
+          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Teacher Dashboard</h1>
+          <p className="text-black font-bold text-lg">Monitor your active learning sessions</p>
         </div>
 
         {/* Stats Cards */}
@@ -382,68 +167,42 @@ export default function TeacherDashboard() {
 
         {/* Sessions List */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-extrabold text-black uppercase tracking-tight border-4 border-black bg-yellow-400 p-4 shadow-[6px_6px_0_0_#000] rounded-none">
-            All Sessions ({sessions.filter(s => s.isActive).length} Active, {sessions.length} Total)
-          </h2>
+          <h2 className="text-2xl font-extrabold text-black uppercase tracking-tight border-4 border-black bg-yellow-400 p-4 shadow-[6px_6px_0_0_#000] rounded-none">Active Sessions</h2>
           
           {sessions.length === 0 ? (
             <Card className="border-4 border-black bg-gray-200 shadow-[6px_6px_0_0_#000] rounded-none">
               <CardContent className="p-8 text-center">
                 <QrCode className="w-12 h-12 text-black mx-auto mb-4" />
-                <h3 className="text-xl font-extrabold text-black mb-2 uppercase">No Sessions Found</h3>
+                <h3 className="text-xl font-extrabold text-black mb-2 uppercase">No Active Sessions</h3>
                 <p className="text-black mb-4 font-bold">
                   Generate QR codes from your study materials to start live sessions
                 </p>
-                <div className="flex gap-4 justify-center">
-                  <Button asChild className="bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
-                    <a href="/ppt">Go to Study Materials</a>
-                  </Button>
-                  <Button
-                    onClick={loadMockData}
-                    className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-yellow-600"
-                  >
-                    Load Mock Data
-                  </Button>
-                </div>
+                <Button asChild className="bg-black text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                  <a href="/ppt">Go to Study Materials</a>
+                </Button>
               </CardContent>
             </Card>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {sessions.map((session) => (
-                <Card key={session.sessionId} className={`border-4 border-black shadow-[6px_6px_0_0_#000] rounded-none ${session.isActive ? "bg-white" : "bg-gray-100"}`}>
+                <Card key={session.sessionId} className="border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <CardTitle className="text-xl font-extrabold text-black uppercase">
-                          {session.type === "flashcards" ? "📚 Flashcards" : "❓ Quiz"}
-                        </CardTitle>
-                        {session.pptFileName && (
-                          <p className="text-xs text-gray-600 mt-1">{session.pptFileName}</p>
-                        )}
-                      </div>
+                      <CardTitle className="text-xl font-extrabold text-black uppercase">
+                        {session.type === "flashcards" ? "📚 Flashcards" : "❓ Quiz"}
+                      </CardTitle>
                       <div className="flex items-center gap-2">
-                        <Badge variant={session.isActive ? "default" : "secondary"} className={`${session.isActive ? "bg-green-500" : "bg-gray-500"} text-white border-2 border-black font-extrabold rounded-none`}>
+                        <Badge variant={session.isActive ? "default" : "secondary"} className="bg-black text-white border-2 border-black font-extrabold rounded-none">
                           {session.isActive ? "Active" : "Inactive"}
                         </Badge>
-                        {session.isActive ? (
+                        {session.isActive && (
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => deactivateSession(session.sessionId)}
                             className="bg-red-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
-                            title="Deactivate Session"
                           >
                             <EyeOff className="w-4 h-4" />
-                          </Button>
-                        ) : (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => reactivateSession(session.sessionId)}
-                            className="bg-green-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]"
-                            title="Reactivate Session"
-                          >
-                            <Eye className="w-4 h-4" />
                           </Button>
                         )}
                       </div>
@@ -469,12 +228,12 @@ export default function TeacherDashboard() {
                       </Badge>
                     </div>
 
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="flex gap-2">
                       <QRCodeGenerator
                         sessionId={session.sessionId}
                         type={session.type}
                         data={session.data}
-                        title={`${session.type === "flashcards" ? "Flashcards" : "Quiz"}`}
+                        title={`${session.type === "flashcards" ? "Flashcards" : "Quiz"} Session`}
                         description={`Students can scan this QR code to access the ${session.type}`}
                       />
                       <Button
