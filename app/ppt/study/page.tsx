@@ -48,18 +48,31 @@ export default function StudyPage() {
     const name = sessionStorage.getItem("pptParsedFileName")
     const currentPptSessionId = sessionStorage.getItem("currentPptSessionId")
     
-    // Reset all state when PPT session changes
+    // Check if PPT session changed
+    if (currentPptSessionId && currentPptSessionId !== pptSessionId) {
+      // PPT session changed, reset everything
+      setFileName(name)
+      setStructured(null)
+      setError("")
+      setModel("")
+      setPending(false)
+      setCardIndex(0)
+      setShowAnswer(false)
+      setQuizIndex(0)
+      setSelected(null)
+      setShowResult(false)
+      setReady(true)
+      return
+    }
+    
+    // Reset UI state
     setFileName(name)
-    setStructured(null)
-    setError("")
-    setModel("")
-    setPending(false)
+    setReady(true)
     setCardIndex(0)
     setShowAnswer(false)
     setQuizIndex(0)
     setSelected(null)
     setShowResult(false)
-    setReady(true)
 
     // Check if we have study data for this PPT session
     const existing = sessionStorage.getItem("geminiStudyStructured")
@@ -68,14 +81,22 @@ export default function StudyPage() {
     const isPending = !!sessionStorage.getItem("geminiStudyPending")
     
     if (existing) {
-      setStructured(JSON.parse(existing))
-      setError(existingErr)
-      setModel(existingModel)
-      setPending(isPending)
+      try {
+        setStructured(JSON.parse(existing))
+        setError(existingErr)
+        setModel(existingModel)
+        setPending(isPending)
+      } catch (e) {
+        console.error("Failed to parse study data:", e)
+        setError("Failed to load study data")
+      }
     } else if (!isPending) {
       // Trigger fetch for new PPT
       const combined = sessionStorage.getItem("pptTextCombined") || ""
-      if (!combined.trim()) return
+      if (!combined.trim()) {
+        setError("No presentation text found. Please upload a presentation first.")
+        return
+      }
       
       ;(async () => {
         try {
@@ -114,6 +135,8 @@ export default function StudyPage() {
           setPending(false)
         }
       })()
+    } else {
+      setPending(true)
     }
   }, [pptSessionId]) // Re-run when PPT session changes
 

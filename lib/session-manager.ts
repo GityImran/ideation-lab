@@ -16,7 +16,7 @@ interface SessionData {
 class SessionManager {
   private sessions: Map<string, SessionData> = new Map()
 
-  createSession(sessionId: string, type: "flashcards" | "quiz", data: any): SessionData {
+  createSession(sessionId: string, type: "flashcards" | "quiz", data: any, pptFileName?: string, pptSessionId?: string): SessionData {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
     const studentUrl = `${baseUrl}/student/${sessionId}/${type}`
     
@@ -27,7 +27,9 @@ class SessionManager {
       createdAt: new Date().toISOString(),
       studentUrl,
       isActive: true,
-      participants: []
+      participants: [],
+      pptFileName,
+      pptSessionId
     }
 
     this.sessions.set(sessionId, session)
@@ -63,6 +65,10 @@ class SessionManager {
 
   getAllActiveSessions(): SessionData[] {
     return Array.from(this.sessions.values()).filter(session => session.isActive)
+  }
+
+  getAllSessions(): SessionData[] {
+    return Array.from(this.sessions.values())
   }
 
   cleanup(): void {

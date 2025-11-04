@@ -18,13 +18,15 @@ type PlacementStructured = {
 }
 
 export default function PlacementPage() {
-  const [fileName, setFileName] = useState<string | null>(null)
-  const [pending, setPending] = useState<boolean>(false)
-  const [error, setError] = useState<string>("")
-  const [model, setModel] = useState<string>("")
-  const [structured, setStructured] = useState<PlacementStructured | null>(null)
-  const [suggestions, setSuggestions] = useState<PlacementSuggestion[]>([])
-  const [newRow, setNewRow] = useState<PlacementSuggestion>({ slide: 1, type: "quiz", position: "after", reason: "" })
+const [fileName, setFileName] = useState<string | null>(null)
+const [pending, setPending] = useState<boolean>(false)
+const [error, setError] = useState<string>("")
+const [model, setModel] = useState<string>("")
+const [structured, setStructured] = useState<PlacementStructured | null>(null)
+const [suggestions, setSuggestions] = useState<PlacementSuggestion[]>([])
+const [newRow, setNewRow] = useState<PlacementSuggestion>({ slide: 1, type: "quiz", position: "after", reason: "" })
+  const [flashcards, setFlashcards] = useState<any[]>([])
+  const [quizzes, setQuizzes] = useState<any[]>([])
   
   // PPT Session ID - generated when PPT is uploaded
   const [pptSessionId] = useState<string>(() => {
@@ -48,6 +50,16 @@ export default function PlacementPage() {
     setPending(false)
     setSuggestions([])
     setNewRow({ slide: 1, type: "quiz", position: "after", reason: "" })
+
+    // Load study data
+    const studyData = sessionStorage.getItem("geminiStudyStructured")
+    if (studyData) {
+      try {
+        const parsed = JSON.parse(studyData)
+        setFlashcards(parsed.flashcards || [])
+        setQuizzes(parsed.quizzes || [])
+      } catch {}
+    }
 
     const existing = sessionStorage.getItem("geminiPlacementStructured")
     const existingErr = sessionStorage.getItem("geminiPlacementError") || ""
@@ -242,8 +254,8 @@ export default function PlacementPage() {
         <SessionManager
         pptFileName={fileName || undefined}
         pptSessionId={pptSessionId}
-        flashcards={[]} // Will be populated from study page
-        quizzes={[]} // Will be populated from study page
+        flashcards={flashcards}
+        quizzes={quizzes}
         />
 
         {/* PPTX Generator */}
@@ -251,10 +263,11 @@ export default function PlacementPage() {
         <PPTXGenerator
         pptFileName={fileName || "Presentation"}
         pptSessionId={pptSessionId}
-        flashcards={[]} // Will be populated from study page
-        quizzes={[]} // Will be populated from study page
+        flashcards={flashcards}
+        quizzes={quizzes}
+        suggestions={suggestions}
         />
-        </div>
+            </div>
         {/* Add row */}
         <div className="border-4 border-dashed border-black p-4 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3">

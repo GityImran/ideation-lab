@@ -20,25 +20,30 @@ interface SessionData {
 export default function TeacherDashboard() {
   const [sessions, setSessions] = useState<SessionData[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         setLoading(true)
+        setError(null)
         const response = await fetch("/api/sessions")
         if (response.ok) {
           const data = await response.json()
           setSessions(data.sessions || [])
+        } else {
+          setError(`Failed to load sessions: ${response.status}`)
         }
       } catch (error) {
         console.error("Failed to fetch sessions:", error)
+        setError("Failed to connect to server")
       } finally {
         setLoading(false)
       }
     }
 
     fetchSessions()
-    
+
     // Poll for updates every 5 seconds
     const interval = setInterval(fetchSessions, 5000)
     return () => clearInterval(interval)
@@ -75,6 +80,23 @@ export default function TeacherDashboard() {
         <div className="text-center border-4 border-black p-8 bg-purple-400 shadow-[6px_6px_0_0_#000] rounded-none">
           <div className="animate-spin rounded-none h-12 w-12 border-4 border-black mx-auto mb-4 border-t-white"></div>
           <p className="text-black font-extrabold text-lg uppercase">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center border-4 border-black p-8 bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <p className="text-black font-extrabold text-lg uppercase mb-4">Error Loading Dashboard</p>
+          <p className="text-black font-bold">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 bg-black text-white px-4 py-2 font-extrabold uppercase border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none hover:shadow-[6px_6px_0_0_#000]"
+          >
+            Retry
+          </button>
         </div>
       </div>
     )

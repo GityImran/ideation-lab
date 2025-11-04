@@ -6,38 +6,59 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Download, FileText, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
+interface PlacementSuggestion {
+  slide: number
+  type: "quiz" | "flashcard"
+  position: "before" | "after" | "during"
+  reason: string
+  notes?: string
+}
+
 interface PPTXGeneratorProps {
   pptFileName: string
   pptSessionId: string
   flashcards?: any[]
   quizzes?: any[]
+  suggestions?: PlacementSuggestion[]
   baseUrl?: string
 }
 
-export function PPTXGenerator({ 
-  pptFileName, 
-  pptSessionId, 
-  flashcards = [], 
-  quizzes = [], 
-  baseUrl = "http://localhost:3000" 
+export function PPTXGenerator({
+pptFileName,
+pptSessionId,
+flashcards = [],
+quizzes = [],
+suggestions = [],
+  baseUrl = "http://localhost:3000"
 }: PPTXGeneratorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
 
   const generatePPTX = async () => {
-    try {
-      setIsGenerating(true)
-      
-      const response = await fetch("/api/pptx", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          pptFileName,
-          pptSessionId,
-          flashcards,
+  try {
+  setIsGenerating(true)
+
+  // Get PPT data from session
+  const pptTextBySlide = JSON.parse(sessionStorage.getItem("pptTextBySlide") || "[]")
+  const pptTextCombined = sessionStorage.getItem("pptTextCombined") || ""
+  
+  // Get PPT file name and session ID from sessionStorage if not provided
+  const finalPptFileName = pptFileName || sessionStorage.getItem("pptParsedFileName") || "Presentation"
+  const finalPptSessionId = pptSessionId || sessionStorage.getItem("currentPptSessionId") || ""
+
+  const response = await fetch("/api/pptx", {
+  method: "POST",
+  headers: {
+  "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+  pptFileName: finalPptFileName,
+    pptSessionId: finalPptSessionId,
+      flashcards,
           quizzes,
+          suggestions,
+          pptTextBySlide,
+          pptTextCombined,
           baseUrl: process.env.NEXT_PUBLIC_BASE_URL || baseUrl
         }),
       })
@@ -70,7 +91,7 @@ export function PPTXGenerator({
     }
   }
 
-  const hasContent = flashcards.length > 0 || quizzes.length > 0
+  const hasContent = flashcards.length > 0 || quizzes.length > 0 || suggestions.length > 0
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -96,17 +117,24 @@ export function PPTXGenerator({
           </p>
           
           <div className="space-y-2">
-            {flashcards.length > 0 && (
+          {flashcards.length > 0 && (
+          <div className="flex items-center gap-2 text-sm">
+          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+          <span>📚 Flashcards ({flashcards.length} cards)</span>
+          </div>
+          )}
+
+          {quizzes.length > 0 && (
+          <div className="flex items-center gap-2 text-sm">
+          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+          <span>🧠 Quiz ({quizzes.length} questions)</span>
+          </div>
+          )}
+
+            {suggestions.length > 0 && (
               <div className="flex items-center gap-2 text-sm">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>📚 Flashcards ({flashcards.length} cards)</span>
-              </div>
-            )}
-            
-            {quizzes.length > 0 && (
-              <div className="flex items-center gap-2 text-sm">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>🧠 Quiz ({quizzes.length} questions)</span>
+                <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                <span>📍 Placement Suggestions ({suggestions.length} insertions)</span>
               </div>
             )}
           </div>

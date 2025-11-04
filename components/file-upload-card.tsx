@@ -191,10 +191,10 @@ export function FileUploadCard() {
 
           {isReady && !loading && (
             <Link
-              href="/ppt/study"
+              href="/ppt/uplaod"
               className="inline-flex items-center justify-center border-4 border-black bg-green-300 px-5 py-2 text-sm font-bold shadow-[4px_4px_0_0_#000] hover:bg-green-400 transition-transform active:translate-x-[2px] active:translate-y-[2px]"
             >
-              Next →
+              View Parsed Content →
             </Link>
           )}
 

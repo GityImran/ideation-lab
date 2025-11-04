@@ -93,16 +93,47 @@ export function SessionManager({
   const [loading, setLoading] = useState(false)
   const [selectedSession, setSelectedSession] = useState<SessionData | null>(null)
 
-  // Generate a unique PPT session ID when PPT is uploaded
-  const currentPptSessionId = pptSessionId || `ppt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  // Get PPT session ID and filename - prioritize props, then sessionStorage
+  const currentPptSessionId = pptSessionId || (typeof window !== "undefined" ? sessionStorage.getItem("currentPptSessionId") || `ppt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` : `ppt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
+  const currentPptFileName = pptFileName || (typeof window !== "undefined" ? sessionStorage.getItem("pptParsedFileName") || sessionStorage.getItem("currentPptFileName") : undefined)
 
-  useEffect(() => {
-    if (pptFileName) {
-      // Store PPT session info
-      sessionStorage.setItem("currentPptSessionId", currentPptSessionId)
-      sessionStorage.setItem("currentPptFileName", pptFileName)
+  const refreshSessions = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch("/api/sessions")
+      if (response.ok) {
+        const data = await response.json()
+        const allSessions = data.sessions || []
+        // Filter to current PPT session if available
+        if (currentPptSessionId) {
+          const filtered = allSessions.filter((s: SessionData) => s.pptSessionId === currentPptSessionId)
+          setSessions(filtered)
+        } else {
+          setSessions(allSessions)
+        }
+        onSessionUpdate?.(allSessions)
+      }
+    } catch (error) {
+      console.error("Error refreshing sessions:", error)
+    } finally {
+      setLoading(false)
     }
-  }, [pptFileName, currentPptSessionId])
+  }
+
+  // Fetch existing sessions on mount and when PPT session changes
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    
+    // Store PPT session info
+    if (currentPptFileName && currentPptSessionId) {
+      sessionStorage.setItem("currentPptSessionId", currentPptSessionId)
+      sessionStorage.setItem("currentPptFileName", currentPptFileName)
+    }
+    
+    // Fetch existing sessions from server
+    refreshSessions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pptFileName, pptSessionId])
 
   const createSession = async (type: "flashcards" | "quiz", data: any[]) => {
     if (data.length === 0) {
@@ -121,7 +152,7 @@ export function SessionManager({
           sessionId,
           type,
           data,
-          pptFileName,
+          pptFileName: currentPptFileName,
           pptSessionId: currentPptSessionId
         }),
       })
@@ -132,20 +163,8 @@ export function SessionManager({
 
       const result = await response.json()
       
-      const newSession: SessionData = {
-        sessionId,
-        type,
-        data,
-        createdAt: new Date().toISOString(),
-        studentUrl: result.studentUrl,
-        isActive: true,
-        participants: [],
-        pptFileName,
-        pptSessionId: currentPptSessionId
-      }
-
-      setSessions(prev => [...prev, newSession])
-      onSessionUpdate?.(sessions)
+      // Refresh sessions from server to get the actual session data
+      await refreshSessions()
       
       toast.success(`${type === "flashcards" ? "Flashcards" : "Quiz"} session created!`)
       
@@ -167,12 +186,8 @@ export function SessionManager({
       })
 
       if (response.ok) {
-        setSessions(prev => prev.map(s => 
-          s.sessionId === sessionId 
-            ? { ...s, isActive: !s.isActive }
-            : s
-        ))
-        
+        // Refresh sessions from server
+        await refreshSessions()
         toast.success(`Session ${session.isActive ? "paused" : "resumed"}`)
       }
     } catch (error) {
@@ -188,7 +203,8 @@ export function SessionManager({
       })
 
       if (response.ok) {
-        setSessions(prev => prev.filter(s => s.sessionId !== sessionId))
+        // Refresh sessions from server
+        await refreshSessions()
         toast.success("Session deleted")
       }
     } catch (error) {
@@ -203,21 +219,6 @@ export function SessionManager({
       toast.success("URL copied to clipboard!")
     } catch (error) {
       toast.error("Failed to copy URL")
-    }
-  }
-
-  const refreshSessions = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch("/api/sessions")
-      if (response.ok) {
-        const data = await response.json()
-        setSessions(data.sessions || [])
-      }
-    } catch (error) {
-      console.error("Error refreshing sessions:", error)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -258,7 +259,7 @@ export function SessionManager({
       </div>
 
       {/* Current PPT Info */}
-      {pptFileName && (
+      {currentPptFileName && (
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
@@ -269,7 +270,7 @@ export function SessionManager({
           <CardContent>
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">{pptFileName}</p>
+                <p className="font-medium">{currentPptFileName}</p>
                 <p className="text-sm text-gray-600">Session ID: {currentPptSessionId}</p>
               </div>
               <div className="flex items-center gap-2">

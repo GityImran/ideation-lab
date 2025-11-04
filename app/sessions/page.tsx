@@ -36,10 +36,11 @@ interface SessionData {
 }
 
 export default function AdvancedSessionManager() {
-  const [sessions, setSessions] = useState<SessionData[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterType, setFilterType] = useState<"all" | "flashcards" | "quiz">("all")
+const [sessions, setSessions] = useState<SessionData[]>([])
+const [loading, setLoading] = useState(true)
+const [error, setError] = useState<string | null>(null)
+const [searchTerm, setSearchTerm] = useState("")
+const [filterType, setFilterType] = useState<"all" | "flashcards" | "quiz">("all")
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all")
 
   useEffect(() => {
@@ -52,13 +53,18 @@ export default function AdvancedSessionManager() {
 
   const fetchSessions = async () => {
     try {
+      setLoading(true)
+      setError(null)
       const response = await fetch("/api/sessions")
       if (response.ok) {
         const data = await response.json()
         setSessions(data.sessions || [])
+      } else {
+        setError(`Failed to load sessions: ${response.status}`)
       }
     } catch (error) {
       console.error("Failed to fetch sessions:", error)
+      setError("Failed to connect to server")
     } finally {
       setLoading(false)
     }
@@ -150,11 +156,28 @@ export default function AdvancedSessionManager() {
   }, {} as Record<string, { pptSessionId: string; pptFileName: string; sessions: SessionData[] }>)
 
   if (loading) {
+  return (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  <div className="text-center">
+  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+  <p className="text-gray-600">Loading sessions...</p>
+  </div>
+  </div>
+  )
+  }
+
+  if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading sessions...</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center border-4 border-black p-8 bg-red-400 shadow-[6px_6px_0_0_#000] rounded-none">
+          <p className="text-black font-extrabold text-lg uppercase mb-4">Error Loading Sessions</p>
+          <p className="text-black font-bold">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 bg-black text-white px-4 py-2 font-extrabold uppercase border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none hover:shadow-[6px_6px_0_0_#000]"
+          >
+            Retry
+          </button>
         </div>
       </div>
     )

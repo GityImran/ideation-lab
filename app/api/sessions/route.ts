@@ -3,10 +3,11 @@ import { sessionManager } from "@/lib/session-manager"
 
 export async function GET(req: NextRequest) {
   try {
-    const sessions = sessionManager.getAllActiveSessions()
+    // Get all sessions (both active and inactive)
+    const allSessions = sessionManager.getAllSessions()
     
     return NextResponse.json({
-      sessions: sessions.map(session => ({
+      sessions: allSessions.map(session => ({
         sessionId: session.sessionId,
         type: session.type,
         data: session.data,

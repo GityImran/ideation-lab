@@ -158,8 +158,15 @@ export default function UploadPage() {
         href="/ppt/study"
         className="inline-flex items-center justify-center border-4 border-black bg-black px-4 py-2 text-sm font-extrabold uppercase tracking-tight text-white shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-800 focus:outline-none"
         >
-        Next
+        Continue to Study Materials →
         </Link>
+        </div>
+        )}
+        
+        {/* Show loading state if pending */}
+        {geminiPending && (
+        <div className="border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+        <p className="text-sm text-gray-600">Generating summary and topics... This may take a moment.</p>
         </div>
         )}
 

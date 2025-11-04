@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sessionManager } from "@/lib/session-manager"
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { sessionId: string } }
+) {
   try {
-    const { searchParams } = new URL(req.url)
-    const sessionId = searchParams.get("sessionId")
+    const sessionId = params.sessionId
 
     if (!sessionId) {
       return NextResponse.json(
@@ -36,10 +38,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { sessionId: string } }
+) {
   try {
-    const { searchParams } = new URL(req.url)
-    const sessionId = searchParams.get("sessionId")
+    const sessionId = params.sessionId
 
     if (!sessionId) {
       return NextResponse.json(
