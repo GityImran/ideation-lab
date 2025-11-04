@@ -10,55 +10,75 @@ type Flashcard = { question: string; answer: string }
 
 export default function StudentFlashcardsPage() {
   const params = useParams()
-  const sessionId = params.sessionId as string
+  const sessionId = params?.sessionId as string
   const [flashcards, setFlashcards] = useState<Flashcard[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  
+  // Handle case where sessionId is not available
+  if (!sessionId) {
+    return (
+      <div className="min-h-screen bg-yellow-100 flex items-center justify-center text-gray-900">
+        <Card className="w-full max-w-md mx-4 border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+          <CardContent className="p-6 text-center">
+            <h1 className="text-2xl font-extrabold text-gray-900 mb-2 uppercase">Invalid Session</h1>
+            <p className="text-gray-900 mb-4 font-bold">
+              Session ID is missing. Please check the URL.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   useEffect(() => {
-    // In a real app, you'd fetch session data from your database
-    // For demo purposes, we'll try to get it from sessionStorage
-    // or generate sample data
     const loadSessionData = async () => {
       try {
         setLoading(true)
+        setError("")
         
-        // Try to fetch from API first
+        // Fetch from API - this should contain the flashcards generated from PPT
         const response = await fetch(`/api/session?sessionId=${sessionId}&type=flashcards`)
-        if (response.ok) {
-          const sessionData = await response.json()
-          setFlashcards(sessionData.data || [])
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError("Session not found. Please check the QR code or session ID.")
+          } else if (response.status === 410) {
+            setError("This session is no longer active.")
+          } else {
+            setError("Failed to load flashcards. Please try again later.")
+          }
+          setFlashcards([])
           return
         }
         
-        // Fallback: Try to get flashcards from sessionStorage (if teacher is on same device)
-        const storedFlashcards = sessionStorage.getItem(`flashcards_${sessionId}`)
-        if (storedFlashcards) {
-          const parsed = JSON.parse(storedFlashcards)
-          setFlashcards(parsed)
-        } else {
-          // Generate sample flashcards for demo
-          const sampleFlashcards: Flashcard[] = [
-            {
-              question: "What is the powerhouse of the cell?",
-              answer: "Mitochondria"
-            },
-            {
-              question: "What process converts light energy to chemical energy?",
-              answer: "Photosynthesis"
-            },
-            {
-              question: "What is the basic unit of life?",
-              answer: "Cell"
-            }
-          ]
-          setFlashcards(sampleFlashcards)
+        const sessionData = await response.json()
+        
+        // Validate that we have flashcards data
+        if (!sessionData.data || !Array.isArray(sessionData.data) || sessionData.data.length === 0) {
+          setError("No flashcards available for this session.")
+          setFlashcards([])
+          return
         }
+        
+        // Validate flashcard structure
+        const validFlashcards = sessionData.data.filter((fc: any) => 
+          fc && typeof fc.question === 'string' && typeof fc.answer === 'string'
+        )
+        
+        if (validFlashcards.length === 0) {
+          setError("Invalid flashcard data format.")
+          setFlashcards([])
+          return
+        }
+        
+        setFlashcards(validFlashcards)
       } catch (err) {
-        setError("Failed to load flashcards")
-        console.error(err)
+        console.error("Error loading flashcards:", err)
+        setError("Failed to load flashcards. Please check your connection and try again.")
+        setFlashcards([])
       } finally {
         setLoading(false)
       }

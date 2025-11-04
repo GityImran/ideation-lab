@@ -14,7 +14,7 @@ type Quiz = {
 
 export default function StudentQuizPage() {
   const params = useParams()
-  const sessionId = params.sessionId as string
+  const sessionId = params?.sessionId as string
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -23,49 +23,75 @@ export default function StudentQuizPage() {
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  
+  // Handle case where sessionId is not available
+  if (!sessionId) {
+    return (
+      <div className="min-h-screen bg-yellow-100 flex items-center justify-center text-gray-900">
+        <Card className="w-full max-w-md mx-4 border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
+          <CardContent className="p-6 text-center">
+            <h1 className="text-2xl font-extrabold text-gray-900 mb-2 uppercase">Invalid Session</h1>
+            <p className="text-gray-900 mb-4 font-bold">
+              Session ID is missing. Please check the URL.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   useEffect(() => {
     const loadSessionData = async () => {
       try {
         setLoading(true)
+        setError("")
         
-        // Try to fetch from API first
+        // Fetch from API - this should contain the quiz questions generated from PPT
         const response = await fetch(`/api/session?sessionId=${sessionId}&type=quiz`)
-        if (response.ok) {
-          const sessionData = await response.json()
-          setQuizzes(sessionData.data || [])
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError("Session not found. Please check the QR code or session ID.")
+          } else if (response.status === 410) {
+            setError("This session is no longer active.")
+          } else {
+            setError("Failed to load quiz. Please try again later.")
+          }
+          setQuizzes([])
           return
         }
         
-        // Fallback: Try to get quizzes from sessionStorage (if teacher is on same device)
-        const storedQuizzes = sessionStorage.getItem(`quizzes_${sessionId}`)
-        if (storedQuizzes) {
-          const parsed = JSON.parse(storedQuizzes)
-          setQuizzes(parsed)
-        } else {
-          // Generate sample quizzes for demo
-          const sampleQuizzes: Quiz[] = [
-            {
-              question: "What is the powerhouse of the cell?",
-              options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
-              correctIndex: 1
-            },
-            {
-              question: "What process converts light energy to chemical energy?",
-              options: ["Respiration", "Photosynthesis", "Digestion", "Circulation"],
-              correctIndex: 1
-            },
-            {
-              question: "What is the basic unit of life?",
-              options: ["Tissue", "Organ", "Cell", "Organism"],
-              correctIndex: 2
-            }
-          ]
-          setQuizzes(sampleQuizzes)
+        const sessionData = await response.json()
+        
+        // Validate that we have quiz data
+        if (!sessionData.data || !Array.isArray(sessionData.data) || sessionData.data.length === 0) {
+          setError("No quiz questions available for this session.")
+          setQuizzes([])
+          return
         }
+        
+        // Validate quiz structure
+        const validQuizzes = sessionData.data.filter((quiz: any) => 
+          quiz && 
+          typeof quiz.question === 'string' && 
+          Array.isArray(quiz.options) && 
+          quiz.options.length >= 2 &&
+          typeof quiz.correctIndex === 'number' &&
+          quiz.correctIndex >= 0 &&
+          quiz.correctIndex < quiz.options.length
+        )
+        
+        if (validQuizzes.length === 0) {
+          setError("Invalid quiz data format.")
+          setQuizzes([])
+          return
+        }
+        
+        setQuizzes(validQuizzes)
       } catch (err) {
-        setError("Failed to load quiz")
-        console.error(err)
+        console.error("Error loading quiz:", err)
+        setError("Failed to load quiz. Please check your connection and try again.")
+        setQuizzes([])
       } finally {
         setLoading(false)
       }

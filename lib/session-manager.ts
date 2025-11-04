@@ -18,6 +18,7 @@ class SessionManager {
 
   createSession(sessionId: string, type: "flashcards" | "quiz", data: any, pptFileName?: string, pptSessionId?: string): SessionData {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    // Ensure studentUrl always includes the type at the end
     const studentUrl = `${baseUrl}/student/${sessionId}/${type}`
     
     const session: SessionData = {
@@ -36,9 +37,18 @@ class SessionManager {
     return session
   }
 
+  // Ensure studentUrl is correct when retrieving sessions
   getSession(sessionId: string): SessionData | undefined {
-    return this.sessions.get(sessionId)
+    const session = this.sessions.get(sessionId)
+    if (session && session.studentUrl && !session.studentUrl.endsWith(`/${session.type}`)) {
+      // Fix studentUrl if it's missing the type
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      session.studentUrl = `${baseUrl}/student/${session.sessionId}/${session.type}`
+      this.sessions.set(sessionId, session)
+    }
+    return session
   }
+
 
   addParticipant(sessionId: string, participantId: string): boolean {
     const session = this.sessions.get(sessionId)
@@ -72,7 +82,15 @@ class SessionManager {
   }
 
   getAllSessions(): SessionData[] {
-    return Array.from(this.sessions.values())
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    // Fix studentUrl for all sessions if needed
+    return Array.from(this.sessions.values()).map(session => {
+      if (session.studentUrl && !session.studentUrl.endsWith(`/${session.type}`)) {
+        session.studentUrl = `${baseUrl}/student/${session.sessionId}/${session.type}`
+        this.sessions.set(session.sessionId, session)
+      }
+      return session
+    })
   }
 
   cleanup(): void {
