@@ -75,7 +75,27 @@ export async function POST(req: NextRequest) {
       task === "summary" ? schemaSummary : task === "study" ? schemaStudy : schemaPlacement,
     ].join("")
 
-    const result = await model.generateContent({ contents: [{ role: "user", parts: [{ text: input }] }] })
+    // Retry logic for rate limiting
+    const maxRetries = 3
+    let attempt = 0
+    let result
+    while (attempt < maxRetries) {
+      try {
+        result = await model.generateContent({ contents: [{ role: "user", parts: [{ text: input }] }] })
+        break // Success, exit loop
+      } catch (err: any) {
+        const isRateLimit = err?.status === 429 || err?.message?.includes("429") || err?.message?.includes("Too Many Requests")
+        if (isRateLimit && attempt < maxRetries - 1) {
+          const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000 // Exponential backoff with jitter
+          console.log(`Rate limit hit, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`)
+          await new Promise(resolve => setTimeout(resolve, delay))
+          attempt++
+        } else {
+          throw err // Re-throw if not rate limit or max retries reached
+        }
+      }
+    }
+    if (!result) throw new Error("Failed to generate content after retries")
     const responseText = result.response?.text?.() || ""
 
     function tryExtractJSON(text: string): any | null {

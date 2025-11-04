@@ -96,6 +96,11 @@ export function FileUploadCard() {
         sessionStorage.setItem("pptTextBySlide", JSON.stringify(bySlide))
         sessionStorage.setItem("pptTextArray", JSON.stringify(flat))
         const combined = flat.join("\n")
+        if (!combined.trim()) {
+          setError("No text found in the presentation. Please ensure it contains readable text content.")
+          setIsReady(false)
+          return
+        }
         sessionStorage.setItem("pptTextCombined", combined)
 
         ;(async () => {
@@ -186,7 +191,7 @@ export function FileUploadCard() {
 
           {isReady && !loading && (
             <Link
-              href="/ppt/uplaod"
+              href="/ppt/study"
               className="inline-flex items-center justify-center border-4 border-black bg-green-300 px-5 py-2 text-sm font-bold shadow-[4px_4px_0_0_#000] hover:bg-green-400 transition-transform active:translate-x-[2px] active:translate-y-[2px]"
             >
               Next →
