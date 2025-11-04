@@ -189,7 +189,7 @@ const [newRow, setNewRow] = useState<PlacementSuggestion>({ slide: 1, type: "qui
   <main className="min-h-screen w-full py-12 px-6 bg-yellow-100 text-gray-900">
   {/* Sticky header */}
   <div className="sticky top-0 z-10 border-4 border-black bg-white shadow-[6px_6px_0_0_#000] rounded-none">
-  <div className="mx-auto max-w-6xl px-6 py-3 flex items-center justify-between">
+  <div className="mx-auto max-w-6xl px-6 py-3 flex items-center justify-between flex-wrap gap-2">
   <div>
   <h1 className="text-xl md:text-2xl font-extrabold uppercase tracking-tight text-gray-900">Suggested Insertions</h1>
   <div className="text-xs md:text-sm text-gray-600 mt-0.5">
@@ -198,26 +198,35 @@ const [newRow, setNewRow] = useState<PlacementSuggestion>({ slide: 1, type: "qui
   {hasUnsaved && <span className="ml-2 text-amber-700 bg-amber-100 border-4 border-black rounded-none px-1.5 py-0.5">Unsaved</span>}
   </div>
   </div>
-  <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2 flex-wrap">
   <button
   onClick={saveChanges}
   disabled={!hasUnsaved}
-  className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100 disabled:opacity-50"
+  className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000] disabled:opacity-50"
   >
   Save
   </button>
   <button
   onClick={resetChanges}
   disabled={!hasUnsaved}
-  className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100 disabled:opacity-50"
+  className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000] disabled:opacity-50"
   >
   Reset
   </button>
-  <Link href="/ppt/study" className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100">
-  Back
+  <Link href="/ppt/study" className="border-4 border-black bg-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000]">
+  ← Study
   </Link>
-  <Link href="/ppt" className="border-4 border-black bg-black px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight text-white shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-800">
+  <Link href="/dashboard" className="border-4 border-black bg-blue-500 text-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-blue-600 hover:shadow-[6px_6px_0_0_#000]">
+  Dashboard
+  </Link>
+  <Link href="/sessions" className="border-4 border-black bg-purple-500 text-white px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-purple-600 hover:shadow-[6px_6px_0_0_#000]">
+  Sessions
+  </Link>
+  <Link href="/ppt" className="border-4 border-black bg-yellow-500 text-black px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-yellow-600 hover:shadow-[6px_6px_0_0_#000]">
   New File
+  </Link>
+  <Link href="/" className="border-4 border-black bg-white text-black px-3 py-1.5 text-xs md:text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000]">
+  Home
   </Link>
   </div>
   </div>

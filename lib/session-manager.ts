@@ -63,6 +63,10 @@ class SessionManager {
     return true
   }
 
+  deleteSession(sessionId: string): boolean {
+    return this.sessions.delete(sessionId)
+  }
+
   getAllActiveSessions(): SessionData[] {
     return Array.from(this.sessions.values()).filter(session => session.isActive)
   }

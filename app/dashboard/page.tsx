@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -265,31 +266,58 @@ export default function TeacherDashboard() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8 border-4 border-black p-6 bg-blue-400 shadow-[6px_6px_0_0_#000] rounded-none">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Teacher Dashboard</h1>
               <p className="text-black font-bold text-lg">Monitor your active learning sessions</p>
             </div>
-            {!useMockData && (
-              <Button
-                onClick={loadMockData}
-                className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-yellow-600"
-              >
-                Load Mock Data
-              </Button>
-            )}
-            {useMockData && (
-              <Button
-                onClick={() => {
-                  setUseMockData(false)
-                  fetchSessions()
-                }}
-                className="bg-green-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-green-600"
-              >
-                Use Real Data
-              </Button>
-            )}
+            <div className="flex gap-2 flex-wrap">
+              {!useMockData && (
+                <Button
+                  onClick={loadMockData}
+                  className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-yellow-600"
+                >
+                  Load Mock Data
+                </Button>
+              )}
+              {useMockData && (
+                <Button
+                  onClick={() => {
+                    setUseMockData(false)
+                    fetchSessions()
+                  }}
+                  className="bg-green-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] hover:bg-green-600"
+                >
+                  Use Real Data
+                </Button>
+              )}
+            </div>
           </div>
+          
+          {/* Navigation Links */}
+          <div className="flex gap-2 flex-wrap mb-4">
+            <Link href="/sessions">
+              <Button className="bg-purple-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
+                All Sessions
+              </Button>
+            </Link>
+            <Link href="/ppt/study">
+              <Button className="bg-green-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
+                Study Materials
+              </Button>
+            </Link>
+            <Link href="/ppt">
+              <Button className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
+                Upload PPT
+              </Button>
+            </Link>
+            <Link href="/">
+              <Button variant="outline" className="bg-white text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000] text-sm">
+                Home
+              </Button>
+            </Link>
+          </div>
+          
           {useMockData && (
             <div className="mt-4 p-3 bg-yellow-200 border-2 border-black rounded-none">
               <p className="text-sm text-black font-bold uppercase">

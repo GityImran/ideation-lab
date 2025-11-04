@@ -142,12 +142,32 @@ export default function UploadPage() {
 
   <div className="space-y-8">
   <div className="border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
-  <Link
+  <div className="flex gap-2 justify-center flex-wrap">
+    <Link
       href="/ppt"
-    className="inline-flex items-center justify-center border-4 border-black bg-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100"
+      className="inline-flex items-center justify-center border-4 border-black bg-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000]"
     >
-        Back
-            </Link>
+      ← Back to Upload
+    </Link>
+    <Link
+      href="/dashboard"
+      className="inline-flex items-center justify-center border-4 border-black bg-blue-500 text-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-blue-600 hover:shadow-[6px_6px_0_0_#000]"
+    >
+      Dashboard
+    </Link>
+    <Link
+      href="/sessions"
+      className="inline-flex items-center justify-center border-4 border-black bg-purple-500 text-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-purple-600 hover:shadow-[6px_6px_0_0_#000]"
+    >
+      All Sessions
+    </Link>
+    <Link
+      href="/"
+      className="inline-flex items-center justify-center border-4 border-black bg-white text-black px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000]"
+    >
+      Home
+    </Link>
+  </div>
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -80,13 +81,11 @@ const [filterType, setFilterType] = useState<"all" | "flashcards" | "quiz">("all
       })
 
       if (response.ok) {
-        setSessions(prev => prev.map(s => 
-          s.sessionId === sessionId 
-            ? { ...s, isActive: !s.isActive }
-            : s
-        ))
-        
+        // Refresh sessions from server
+        await fetchSessions()
         toast.success(`Session ${session.isActive ? "paused" : "resumed"}`)
+      } else {
+        toast.error("Failed to update session")
       }
     } catch (error) {
       console.error("Error toggling session:", error)
@@ -95,14 +94,22 @@ const [filterType, setFilterType] = useState<"all" | "flashcards" | "quiz">("all
   }
 
   const deleteSession = async (sessionId: string) => {
+    if (!confirm("Are you sure you want to permanently delete this session? This action cannot be undone.")) {
+      return
+    }
+
     try {
-      const response = await fetch(`/api/sessions/${sessionId}`, {
+      const response = await fetch(`/api/sessions/${sessionId}?permanent=true`, {
         method: "DELETE"
       })
 
       if (response.ok) {
-        setSessions(prev => prev.filter(s => s.sessionId !== sessionId))
-        toast.success("Session deleted")
+        // Refresh sessions from server
+        await fetchSessions()
+        toast.success("Session permanently deleted")
+      } else {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+        toast.error(errorData.error || "Failed to delete session")
       }
     } catch (error) {
       console.error("Error deleting session:", error)
@@ -188,8 +195,34 @@ const [filterType, setFilterType] = useState<"all" | "flashcards" | "quiz">("all
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 border-4 border-black p-6 bg-cyan-400 shadow-[6px_6px_0_0_#000] rounded-none">
-          <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Advanced Session Manager</h1>
-          <p className="text-black font-bold text-lg">Manage all your learning sessions across presentations</p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-4xl font-extrabold text-black mb-2 uppercase tracking-tight">Advanced Session Manager</h1>
+              <p className="text-black font-bold text-lg">Manage all your learning sessions across presentations</p>
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/dashboard">
+                <Button className="bg-blue-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                  Dashboard
+                </Button>
+              </Link>
+              <Link href="/ppt/study">
+                <Button className="bg-green-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                  Study Materials
+                </Button>
+              </Link>
+              <Link href="/ppt">
+                <Button className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                  Upload PPT
+                </Button>
+              </Link>
+              <Link href="/">
+                <Button variant="outline" className="bg-white text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                  Home
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -312,19 +345,27 @@ const [filterType, setFilterType] = useState<"all" | "flashcards" | "quiz">("all
         {/* Sessions by Presentation */}
         <div className="space-y-6">
           {Object.keys(groupedSessions).length === 0 ? (
-            <Card>
+            <Card className="border-4 border-black bg-gray-200 shadow-[6px_6px_0_0_#000] rounded-none">
               <CardContent className="p-8 text-center">
-                <QrCode className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No Sessions Found</h3>
-                <p className="text-gray-600 mb-4">
+                <QrCode className="w-12 h-12 text-black mx-auto mb-4" />
+                <h3 className="text-xl font-extrabold text-black mb-2 uppercase">No Sessions Found</h3>
+                <p className="text-black mb-4 font-bold">
                   {searchTerm || filterType !== "all" || filterStatus !== "all"
                     ? "No sessions match your current filters."
                     : "Create sessions from your study materials to get started."
                   }
                 </p>
-                <Button asChild>
-                  <a href="/ppt">Go to Study Materials</a>
-                </Button>
+                <div className="flex gap-2 justify-center flex-wrap">
+                  <Button asChild className="bg-green-500 text-white border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                    <Link href="/ppt/study">Study Materials</Link>
+                  </Button>
+                  <Button asChild className="bg-yellow-500 text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                    <Link href="/ppt">Upload PPT</Link>
+                  </Button>
+                  <Button asChild variant="outline" className="bg-white text-black border-2 border-black shadow-[4px_4px_0_0_#000] rounded-none font-extrabold hover:shadow-[6px_6px_0_0_#000]">
+                    <Link href="/dashboard">Dashboard</Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ) : (

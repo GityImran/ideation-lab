@@ -178,17 +178,20 @@ export default function StudyPage() {
   <div className="space-y-8">
   <div className="border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] rounded-none">
   <div className="flex gap-2 justify-center flex-wrap">
-    <Link href="/ppt/uplaod" className="border-4 border-black bg-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100">
-      Back to Upload
+    <Link href="/ppt/uplaod" className="border-4 border-black bg-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000]">
+      ← Upload
   </Link>
-    <Link href="/dashboard" className="border-4 border-black bg-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100">
+    <Link href="/dashboard" className="border-4 border-black bg-blue-500 text-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-blue-600 hover:shadow-[6px_6px_0_0_#000]">
       Dashboard
   </Link>
-    <Link href="/sessions" className="border-4 border-black bg-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-gray-900 shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-100">
+    <Link href="/sessions" className="border-4 border-black bg-purple-500 text-white px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-purple-600 hover:shadow-[6px_6px_0_0_#000]">
       All Sessions
   </Link>
-    <Link href="/ppt" className="border-4 border-black bg-black px-3 py-2 text-sm font-extrabold uppercase tracking-tight text-white shadow-[6px_6px_0_0_#000] rounded-none hover:bg-gray-800">
+    <Link href="/ppt" className="border-4 border-black bg-yellow-500 text-black px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-yellow-600 hover:shadow-[6px_6px_0_0_#000]">
         New File
+        </Link>
+    <Link href="/" className="border-4 border-black bg-white text-black px-3 py-2 text-sm font-extrabold uppercase tracking-tight shadow-[4px_4px_0_0_#000] rounded-none hover:bg-gray-100 hover:shadow-[6px_6px_0_0_#000]">
+        Home
         </Link>
             </div>
           </div>
